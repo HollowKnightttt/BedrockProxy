@@ -11,11 +11,11 @@
     <repositories>
         <repository>
             <id>nukkitx-repo-release</id>
-            <url>https://repo.nukkitx.com/maven-releases/</url>
+            <url>https://repo.opencollab.dev/maven-releases</url>
         </repository>
         <repository>
             <id>nukkitx-repo-snapshot</id>
-            <url>https://repo.nukkitx.com/maven-snapshots/</url>
+            <url>https://repo.opencollab.dev/maven-snapshots</url>
         </repository>
         <repository>
             <id>jitpack.io</id>

@@ -1,48 +1,72 @@
 package org.akmalfairuz.bedrockproxy.server;
 
-import org.cloudburstmc.protocol.bedrock.BedrockClient;
-import org.cloudburstmc.protocol.bedrock.BedrockPong;
-import org.cloudburstmc.protocol.bedrock.BedrockServerEventHandler;
-import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
-import org.cloudburstmc.protocol.bedrock.packet.DisconnectPacket;
-import org.cloudburstmc.protocol.bedrock.codec.v2193.Bedrock_v2193;
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.Channel;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.nio.NioDatagramChannel;
 import org.akmalfairuz.bedrockproxy.Player;
 import org.akmalfairuz.bedrockproxy.ProxyServer;
 import org.akmalfairuz.bedrockproxy.utils.Log;
+import org.cloudburstmc.netty.channel.raknet.RakChannelFactory;
+import org.cloudburstmc.netty.channel.raknet.config.RakChannelOption;
+import org.cloudburstmc.protocol.bedrock.BedrockPong;
+import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
+import org.cloudburstmc.protocol.bedrock.codec.v2193.Bedrock_v2193;
+import org.cloudburstmc.protocol.bedrock.netty.initializer.BedrockServerInitializer;
+import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
+import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketHandler;
+import org.cloudburstmc.protocol.bedrock.packet.DisconnectPacket;
+import org.cloudburstmc.protocol.common.PacketSignal;
 
 import java.net.InetSocketAddress;
+import java.util.concurrent.TimeUnit;
 
-public class ServerHandler implements BedrockServerEventHandler {
+// AI GENERATED CODE!!!!! (claude.ai) 
+public class ServerHandler extends BedrockServerInitializer {
 
-    private ProxyServer proxy;
+    private static final int MAX_PLAYERS = 10;
+
+    private final ProxyServer proxy;
 
     public ServerHandler(ProxyServer proxyServer) {
-        proxy = proxyServer;
+        this.proxy = proxyServer;
     }
 
-    @Override
-    public boolean onConnectionRequest(InetSocketAddress address) {
-        return true;
+    
+    public BedrockPong createPong() {
+        return new BedrockPong()
+                .edition("MCPE")
+                .motd("BedrockProxy HK Edition")
+                .subMotd("BedrockProxy HK Edition For 1.26.50")
+                .playerCount(proxy.players.size())
+                .maximumPlayerCount(MAX_PLAYERS)
+                .gameType("Survival")
+                .version("1.26.50")
+                .protocolVersion(Bedrock_v2193.CODEC.getProtocolVersion())
+                .ipv4Port(19132)
+                .ipv6Port(19132)
+                .nintendoLimited(false);
     }
 
-    @Override
-    public BedrockPong onQuery(InetSocketAddress address) {
-        BedrockPong pong = new BedrockPong();
-        pong.setEdition("MCPE");
-        pong.setMotd("BedrockProxy HK Edition");
-        pong.setPlayerCount(proxy.players.size());
-        pong.setMaximumPlayerCount(10);
-        pong.setGameType("Survival");
-        pong.setVersion("1.26.50");
-        pong.setProtocolVersion(Bedrock_v2193.V2193_CODEC.getProtocolVersion());
-        pong.setIpv4Port(19132);
-        pong.setIpv6Port(19132);
-        pong.setNintendoLimited(false);
-        pong.setSubMotd("BedrockProxy HK Edition For 1.26.50");
-        return pong;
+    public void updatePong(Channel serverChannel) {
+        serverChannel.config().setOption(RakChannelOption.RAK_ADVERTISEMENT, createPong().toByteBuf());
     }
 
-    public DisconnectPacket createDisconnect(String message){
+    public Channel bind(InetSocketAddress address) {
+        Channel channel = new ServerBootstrap()
+                .channelFactory(RakChannelFactory.server(NioDatagramChannel.class))
+                .option(RakChannelOption.RAK_ADVERTISEMENT, createPong().toByteBuf())
+                .group(new NioEventLoopGroup())
+                .childHandler(this)
+                .bind(address)
+                .syncUninterruptibly()
+                .channel();
+
+        channel.eventLoop().scheduleAtFixedRate(() -> updatePong(channel), 5, 5, TimeUnit.SECONDS);
+        return channel;
+    }
+
+    public DisconnectPacket createDisconnect(String message) {
         DisconnectPacket dc = new DisconnectPacket();
         dc.setKickMessage(message);
         dc.setMessageSkipped(false);
@@ -50,21 +74,39 @@ public class ServerHandler implements BedrockServerEventHandler {
     }
 
     @Override
-    public void onSessionCreation(BedrockServerSession serverSession) {
-        if(proxy.players.size() > 10) {
-            serverSession.sendPacketImmediately(createDisconnect("Proxy full!"));
-            serverSession.disconnect();
+    public void initSession(BedrockServerSession session) {
+        session.setCodec(Bedrock_v2193.CODEC);
+
+        if (proxy.players.size() >= MAX_PLAYERS) {
+            session.disconnect("Proxy full!");
             return;
         }
-        Player player = new Player(serverSession, this, proxy);
-        serverSession.addDisconnectHandler((reason) -> {
-            if(player.getServerSession() != null) {
+
+        Player player = new Player(session, this, proxy);
+        session.setPacketHandler(new ClientPacketHandler(player));
+        Log.info(session.getSocketAddress() + " joined");
+    }
+
+    private static class ClientPacketHandler implements BedrockPacketHandler {
+
+        private final Player player;
+
+        ClientPacketHandler(Player player) {
+            this.player = player;
+        }
+
+        @Override
+        public PacketSignal handlePacket(BedrockPacket packet) {
+            return PacketSignal.UNHANDLED;
+        }
+
+        @Override
+        public void onDisconnect(CharSequence reason) {
+            if (player.getServerSession() != null) {
                 player.getServerSession().disconnect();
                 player.setConnectedToServer(false);
             }
             player.close();
-        });
-        serverSession.setBatchHandler(new ClientBatchHandler(serverSession, player));
-        Log.info(serverSession.getAddress() + " joined");
+        }
     }
-}
+                                         }

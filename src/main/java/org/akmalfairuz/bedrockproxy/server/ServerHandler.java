@@ -1,11 +1,11 @@
 package org.akmalfairuz.bedrockproxy.server;
 
-import com.nukkitx.protocol.bedrock.BedrockClient;
-import com.nukkitx.protocol.bedrock.BedrockPong;
-import com.nukkitx.protocol.bedrock.BedrockServerEventHandler;
-import com.nukkitx.protocol.bedrock.BedrockServerSession;
-import com.nukkitx.protocol.bedrock.packet.DisconnectPacket;
-import com.nukkitx.protocol.bedrock.v440.Bedrock_v440;
+import org.cloudburstmc.protocol.bedrock.BedrockClient;
+import org.cloudburstmc.protocol.bedrock.BedrockPong;
+import org.cloudburstmc.protocol.bedrock.BedrockServerEventHandler;
+import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
+import org.cloudburstmc.protocol.bedrock.packet.DisconnectPacket;
+import org.cloudburstmc.protocol.bedrock.codec.v2193.Bedrock_v2193;
 import org.akmalfairuz.bedrockproxy.Player;
 import org.akmalfairuz.bedrockproxy.ProxyServer;
 import org.akmalfairuz.bedrockproxy.utils.Log;
@@ -28,17 +28,17 @@ public class ServerHandler implements BedrockServerEventHandler {
     @Override
     public BedrockPong onQuery(InetSocketAddress address) {
         BedrockPong pong = new BedrockPong();
-        pong.setEdition("MCPE");
-        pong.setMotd("BedrockProxy");
+        pong.setEdition("Minecraft: Bedrock Edition");
+        pong.setMotd("BedrockProxy HK Edition");
         pong.setPlayerCount(proxy.players.size());
         pong.setMaximumPlayerCount(10);
         pong.setGameType("Survival");
-        pong.setVersion("1.17.0");
-        pong.setProtocolVersion(Bedrock_v440.V440_CODEC.getProtocolVersion());
+        pong.setVersion("1.26.50");
+        pong.setProtocolVersion(Bedrock_v2193.V2193_CODEC.getProtocolVersion());
         pong.setIpv4Port(19132);
         pong.setIpv6Port(19132);
         pong.setNintendoLimited(false);
-        pong.setSubMotd("BedrockProxy");
+        pong.setSubMotd("BedrockProxy HK Edition For 1.26.50");
         return pong;
     }
 

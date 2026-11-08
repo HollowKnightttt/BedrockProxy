@@ -1,8 +1,8 @@
 package org.akmalfairuz.bedrockproxy.server;
 
-import com.nukkitx.math.vector.Vector2f;
-import com.nukkitx.math.vector.Vector3f;
-import com.nukkitx.math.vector.Vector3i;
+import org.cloudburstmc.math.vector.Vector2f;
+import org.cloudburstmc.math.vector.Vector3f;
+import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.*;
 import org.cloudburstmc.protocol.bedrock.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.BedrockSession;

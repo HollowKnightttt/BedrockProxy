@@ -1,12 +1,12 @@
 package org.akmalfairuz.bedrockproxy.server;
 
 import com.nimbusds.jwt.SignedJWT;
-import com.nukkitx.protocol.bedrock.BedrockPacket;
-import com.nukkitx.protocol.bedrock.BedrockSession;
-import com.nukkitx.protocol.bedrock.data.entity.EntityFlag;
-import com.nukkitx.protocol.bedrock.handler.BatchHandler;
-import com.nukkitx.protocol.bedrock.packet.*;
-import com.nukkitx.protocol.bedrock.util.EncryptionUtils;
+import org.cloudburstmc.protocol.bedrock.BedrockPacket;
+import org.cloudburstmc.protocol.bedrock.BedrockSession;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
+import org.cloudburstmc.protocol.bedrock.handler.BatchHandler;
+import org.cloudburstmc.protocol.bedrock.packet.*;
+import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;
 import io.netty.buffer.ByteBuf;
 import org.akmalfairuz.bedrockproxy.Player;
 import org.akmalfairuz.bedrockproxy.utils.Log;

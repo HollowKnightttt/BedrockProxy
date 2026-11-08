@@ -1,8 +1,8 @@
 package org.akmalfairuz.bedrockproxy.server;
 
-import com.nukkitx.protocol.bedrock.BedrockPacket;
-import com.nukkitx.protocol.bedrock.data.entity.EntityLinkData;
-import com.nukkitx.protocol.bedrock.packet.*;
+import org.cloudburstmc.protocol.bedrock.BedrockPacket;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityLinkData;
+import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.akmalfairuz.bedrockproxy.Player;
 import org.akmalfairuz.bedrockproxy.utils.Log;
 

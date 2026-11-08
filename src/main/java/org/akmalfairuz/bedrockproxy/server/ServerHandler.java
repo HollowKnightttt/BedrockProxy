@@ -28,7 +28,7 @@ public class ServerHandler implements BedrockServerEventHandler {
     @Override
     public BedrockPong onQuery(InetSocketAddress address) {
         BedrockPong pong = new BedrockPong();
-        pong.setEdition("Minecraft: Bedrock Edition");
+        pong.setEdition("MCPE");
         pong.setMotd("BedrockProxy HK Edition");
         pong.setPlayerCount(proxy.players.size());
         pong.setMaximumPlayerCount(10);

@@ -1,16 +1,16 @@
 package org.akmalfairuz.bedrockproxy.server;
 
-import com.nukkitx.math.vector.Vector2f;
-import com.nukkitx.math.vector.Vector3f;
-import com.nukkitx.math.vector.Vector3i;
-import com.nukkitx.nbt.*;
-import com.nukkitx.protocol.bedrock.BedrockPacket;
-import com.nukkitx.protocol.bedrock.BedrockSession;
-import com.nukkitx.protocol.bedrock.data.*;
-import com.nukkitx.protocol.bedrock.data.inventory.ItemData;
-import com.nukkitx.protocol.bedrock.handler.BatchHandler;
-import com.nukkitx.protocol.bedrock.packet.*;
-import com.nukkitx.protocol.bedrock.v440.Bedrock_v440;
+import org.cloudburstmc.math.vector.Vector2f;
+import org.cloudburstmc.math.vector.Vector3f;
+import org.cloudburstmc.math.vector.Vector3i;
+import org.cloudburstmc.nbt.*;
+import org.cloudburstmc.protocol.bedrock.BedrockPacket;
+import org.cloudburstmc.protocol.bedrock.BedrockSession;
+import org.cloudburstmc.protocol.bedrock.data.*;
+import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
+import org.cloudburstmc.protocol.bedrock.handler.BatchHandler;
+import org.cloudburstmc.protocol.bedrock.packet.*;
+import org.cloudburstmc.protocol.bedrock.codec.v2193.Bedrock_v2193;
 import io.netty.buffer.ByteBuf;
 import lombok.Getter;
 import org.akmalfairuz.bedrockproxy.Player;
@@ -81,7 +81,7 @@ public class ClientBatchHandler implements BatchHandler {
         if(packet instanceof ResourcePackClientResponsePacket) {
             if(((ResourcePackClientResponsePacket) packet).getStatus() == ResourcePackClientResponsePacket.Status.HAVE_ALL_PACKS) {
                 ResourcePackStackPacket packStackPacket = new ResourcePackStackPacket();
-                packStackPacket.setGameVersion("1.17.0");
+                packStackPacket.setGameVersion("1.26.50");
                 packStackPacket.setExperimentsPreviouslyToggled(false);
                 packStackPacket.setForcedToAccept(false);
                 session.sendPacket(packStackPacket);

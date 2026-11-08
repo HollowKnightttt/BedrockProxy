@@ -1,8 +1,8 @@
 package org.akmalfairuz.bedrockproxy;
 
-import com.nukkitx.protocol.bedrock.BedrockPong;
-import com.nukkitx.protocol.bedrock.BedrockServer;
-import com.nukkitx.protocol.bedrock.v440.Bedrock_v440;
+import org.cloudburstmc.protocol.bedrock.BedrockPong;
+import org.cloudburstmc.protocol.bedrock.BedrockServer;
+import org.cloudburstmc.protocol.bedrock.codec.v2193.Bedrock_v2193;
 import lombok.Getter;
 import org.akmalfairuz.bedrockproxy.server.ServerHandler;
 import org.akmalfairuz.bedrockproxy.utils.Log;

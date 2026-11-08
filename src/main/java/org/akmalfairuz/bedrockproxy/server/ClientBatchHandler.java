@@ -23,6 +23,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.ThreadLocalRandom;
 
+// Now It's support 1.26.50! 
+// Wanna Help? DM me on discord 10b10t_
 public class ClientBatchHandler implements BatchHandler {
 
     @Getter
